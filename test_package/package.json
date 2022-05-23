@@ -1,6 +1,6 @@
 {
-  "name": "empty_arr_test",
-  "version": "2.0.0",
+  "name": "test_package",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.21"
+    "empty_arr_test": "^2.0.0"
   }
 }
