@@ -16,7 +16,7 @@ let student_validation = Joi.object({
     name : Joi.string().min(3).required(),
     class : Joi.string().max(15),
     age : Joi.number().integer().positive(),
-
+    address : Joi.string()
 
 });
 
@@ -38,8 +38,7 @@ app.post('/api/students', function (req,res) {
         return res.status(400).send(result_valid.error)
     let student = {
         id : students.length + 1,
-        name : req.body.name,
-        class : req.body.class
+        ...req.body
     }
     students.push(student);
     res.send(student);
