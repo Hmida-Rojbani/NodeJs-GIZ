@@ -1,14 +1,23 @@
 const express = require('express');
+const Joi = require('joi');
 const app=express();
 
 app.use(express.json())
 
 let students = [
-    {id: 1, name:'student1'},
-    {id: 2, name:'student2'},
-    {id: 3, name:'student3'}
+    {id: 1, name:'student1', class:'class1',age:22},
+    {id: 2, name:'student2', class:'class1',age:21},
+    {id: 3, name:'student3', class:'class2',age:22}
 ];
+// Define validation schema
+let student_validation = Joi.object({
+    id: Joi.number().positive(),
+    name : Joi.string().min(3).required(),
+    class : Joi.string().max(15),
+    age : Joi.number().integer().positive(),
 
+
+});
 
 
 app.get('/api/students', function (req,res) {
@@ -23,9 +32,13 @@ app.get('/api/students/:id', function (req,res) {
 })
 
 app.post('/api/students', function (req,res) {
+    let result_valid= student_validation.validate(req.body);
+    if(result_valid.error)
+        return res.status(400).send(result_valid.error)
     let student = {
         id : students.length + 1,
-        name : req.body.name
+        name : req.body.name,
+        class : req.body.class
     }
     students.push(student);
     res.send(student);
