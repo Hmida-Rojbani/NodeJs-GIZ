@@ -1,0 +1,5 @@
+1-Make the PUT function use Joi validator
+2-Add a Get function to retreive all student with address givent ib the path variable
+ exemple of Path '/api/students/by_address/Ariana'
+3-Add a function that return the age average of all students.
+4- 

@@ -5,9 +5,10 @@ const app=express();
 app.use(express.json())
 
 let students = [
-    {id: 1, name:'student1', class:'class1',age:22},
-    {id: 2, name:'student2', class:'class1',age:21},
-    {id: 3, name:'student3', class:'class2',age:22}
+    {id: 1, name:'student1', class:'class1',age:22, address:'Tunis'},
+    {id: 2, name:'student2', class:'class1',age:21, address:'Ariana'},
+    {id: 3, name:'student3', class:'class2',age:18, address:'Tunis'},
+    {id: 4, name:'student4', class:'class2',age:19, address:'Ariana'}
 ];
 // Define validation schema
 let student_validation = Joi.object({
