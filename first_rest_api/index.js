@@ -1,8 +1,21 @@
 const express = require('express');
 const Joi = require('joi');
+const morgan = require('morgan')
+const config = require('config');
 const app=express();
+const port = process.env.PORT || 3000;
+
+console.log(process.env.NODE_ENV)
+console.log(app.get('env'));
+
+if(app.get('env')==='development')
+    app.use(morgan('dev'))
 
 app.use(express.json())
+
+console.log('Application name :', config.get('app_name'));
+console.log('DB host :', config.get('db.host'));
+console.log('DB password :', config.get('db.password'));
 
 let students = [
     {id: 1, name:'student1', class:'class1',age:22, address:'Tunis'},
@@ -20,24 +33,23 @@ let student_validation = Joi.object({
 
 });
 
-app.use((req,res,next)=>{
-    console.log('First MidleWare');
-    
-})
 
-app.get('/api/students',(req,res,next)=>{
-    console.log('Only for GEt');
-    next();
-} ,function (req,res) {
+// app.get('/api/students',(req,res,next)=>{
+//     console.log('Only for GEt');
+//     next();
+// } ,function (req,res) {
+//     res.send(students);
+// });
+app.get('/api/students',function (req,res) {
     res.send(students);
 });
 
 
 
-app.use((req,res,next)=>{
-    console.log('Second MidleWare');
-    next();
-})
+// app.use((req,res,next)=>{
+//     console.log('Second MidleWare');
+//     next();
+// })
 
 app.get('/api/students/:id', function (req,res) {
     let student = students.find(s=>s.id===parseInt(req.params.id));
@@ -75,6 +87,6 @@ app.delete('/api/students/:id', function (req,res) {
 })
 
 
-app.listen(3000,function () {
-    console.log('Server running on 3000');
+app.listen(port,function () {
+    console.log('Server running on '+port);
 })
