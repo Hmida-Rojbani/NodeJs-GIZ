@@ -20,10 +20,24 @@ let student_validation = Joi.object({
 
 });
 
+app.use((req,res,next)=>{
+    console.log('First MidleWare');
+    
+})
 
-app.get('/api/students', function (req,res) {
+app.get('/api/students',(req,res,next)=>{
+    console.log('Only for GEt');
+    next();
+} ,function (req,res) {
     res.send(students);
 });
+
+
+
+app.use((req,res,next)=>{
+    console.log('Second MidleWare');
+    next();
+})
 
 app.get('/api/students/:id', function (req,res) {
     let student = students.find(s=>s.id===parseInt(req.params.id));
