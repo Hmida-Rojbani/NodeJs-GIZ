@@ -119,4 +119,12 @@ router.get('/name/:name/class/:class', async (req,res)=>{
     res.send(students)
 
 });
+
+router.get('/adress/city/:city', async (req,res)=>{
+    // let students = await Student.find({name:req.params.name,class: req.params.class})
+    let students = await Student.find({"adress.city" : req.params.city})
+    if(students.length==0)
+        return res.status(204).send();
+    res.send(students)
+});
 module.exports=router
