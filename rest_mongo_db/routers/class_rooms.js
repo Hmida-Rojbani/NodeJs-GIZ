@@ -37,4 +37,12 @@ router.get('/active', async (req,res)=>{
 
 });
 
+router.get('/tag/:tag', async (req,res)=>{
+    let classRooms = await ClassRoom.find({tags:{$in : new RegExp(req.params.tag,'i')}})
+    if(classRooms.length==0)
+        return res.status(204).send();
+    res.send(classRooms)
+
+});
+
 module.exports=router
