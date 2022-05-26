@@ -13,15 +13,15 @@ router.post('/', async (req,res)=>{
     }
 });
 
-//retreive all students
+//retreive all classrooms
 router.get('/', async (req,res)=>{
     let classRooms = await ClassRoom.find();
     res.send(classRooms)
 
 })
 //find by Id
-router.get('/:id', async (req,res)=>{
-    let classRoom = await ClassRoom.ClassRoom(req.params.id);
+router.get('/id/:id', async (req,res)=>{
+    let classRoom = await ClassRoom.find(req.params.id);
     if(!classRoom)
         return res.status(404).send('ClassRoom not found')
     res.send(classRoom)
@@ -29,8 +29,8 @@ router.get('/:id', async (req,res)=>{
 });
 
 //find active classes
-router.get('/acitve', async (req,res)=>{
-    let classRooms = await ClassRoom.find({active : true});
+router.get('/active', async (req,res)=>{
+    let classRooms = await ClassRoom.find({active:true})
     if(classRooms.length==0)
         return res.status(204).send();
     res.send(classRooms)
