@@ -6,6 +6,8 @@ router.post('/', async (req,res)=>{
 
     let classRoom = new ClassRoom(req.body);
     try {
+        classRoom.nb_students = 0;
+        classRoom.students = [];
         classRoom = await classRoom.save();
         res.send(classRoom)
     } catch (error) {
@@ -21,7 +23,7 @@ router.get('/', async (req,res)=>{
 })
 //find by Id
 router.get('/id/:id', async (req,res)=>{
-    let classRoom = await ClassRoom.find(req.params.id);
+    let classRoom = await ClassRoom.findById(req.params.id).populate('students','name');
     if(!classRoom)
         return res.status(404).send('ClassRoom not found')
     res.send(classRoom)

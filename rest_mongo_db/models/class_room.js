@@ -5,7 +5,14 @@ const classRoom_schema = new mongoose.Schema({
     price:Number,
     nb_students : Number,
     active : Boolean,
-    tags : [String]
+    tags : [String],
+    students : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Student'
+        }
+    ]
+
 });
 
 let ClassRoom = mongoose.model('ClassRoom',classRoom_schema);

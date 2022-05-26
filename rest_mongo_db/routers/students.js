@@ -1,13 +1,27 @@
 const router = require('express').Router();
 const {Student} = require('../models/student');
+const {ClassRoom} = require('../models/class_room');
+const studentDebug = require('debug')('app:route:student');
 
 //save student
 router.post('/', async (req,res)=>{
-
+    //check if class exist
+    let classId = req.body.class;
+    let classRoom = await ClassRoom.findById(classId);
+    
+    if(!classRoom)
+        return res.status(400).send('Class Id not Found');
     let student = new Student(req.body);
+    
     try {
         student = await student.save();
-        res.send(student)
+        studentDebug('student saved');
+        classRoom.students.push(student._id);
+        classRoom.nb_students = classRoom.nb_students +1;
+        
+        await classRoom.save();
+        studentDebug('classRoom updated');
+        return res.send(student)
     } catch (error) {
         res.send(405).send(error.message);
     }
@@ -15,7 +29,8 @@ router.post('/', async (req,res)=>{
 
 //retreive all students
 router.get('/', async (req,res)=>{
-    let students = await Student.find().populate('class');
+    let students = await Student.find()
+                        .populate('class','name active')
     res.send(students)
 
 })
