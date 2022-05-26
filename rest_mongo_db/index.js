@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use('/api/students',student_router)
+app.use('/api/students',student_router);
 
 
 app.listen(port, ()=> appDebug(`Server run on ${port}`))
