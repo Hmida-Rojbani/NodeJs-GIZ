@@ -90,10 +90,9 @@ router.get('/or/name/:name/class/:class', async (req,res)=>{
     // let students = await Student.find({name:req.params.name,class: req.params.class})
     let students = await Student.find({$or : [{name:req.params.name},{class: req.params.class}]})
     if(students.length==0)
-         return res.status(204).send();
-     res.send(students)
- 
- });
+        return res.status(204).send();
+    res.send(students)
+});
 
  //two criteria (return second if first criteria is missing)
 router.get('/name/:name/class/:class', async (req,res)=>{
@@ -101,8 +100,8 @@ router.get('/name/:name/class/:class', async (req,res)=>{
     let students = await Student.find()
                                 .or({name:req.params.name},{class: req.params.class})
     if(students.length==0)
-         return res.status(204).send();
-     res.send(students)
- 
- });
+        return res.status(204).send();
+    res.send(students)
+
+});
 module.exports=router

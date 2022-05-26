@@ -1,0 +1,8 @@
+Create a new model ClassRoom 
+    {
+        name : string
+        price : number
+        nb_students : number
+        active : boolean
+        
+    }
