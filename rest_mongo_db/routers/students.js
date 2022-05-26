@@ -15,7 +15,7 @@ router.post('/', async (req,res)=>{
 
 //retreive all students
 router.get('/', async (req,res)=>{
-    let students = await Student.find();
+    let students = await Student.find().populate('class');
     res.send(students)
 
 })
