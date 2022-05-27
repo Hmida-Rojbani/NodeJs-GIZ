@@ -11,6 +11,13 @@ const classRoom_schema = new mongoose.Schema({
             type : mongoose.Schema.Types.ObjectId,
             ref : 'Student'
         }
+    ],
+
+    teachers : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Teacher'
+        }
     ]
 
 });

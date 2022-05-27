@@ -31,6 +31,8 @@ router.put('/:id_teacher/add/class/:id_class',async (req,res)=>{
         }
         teacher.classrooms.push(classObjRelation);
         teacher = await teacher.save();
+        classRoom.teachers.push(teacher._id);
+        await classRoom.save();
         return res.send(teacher)
     } catch (error) {
         res.send(405).send(error.message);
