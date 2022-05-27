@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {Teacher} = require('../models/teacher');
 const {ClassRoom} = require('../models/class_room');
+const teacherDebugger = require('debug')('app:teachers')
 
 router.post('/',async (req,res)=>{
     
@@ -37,6 +38,44 @@ router.put('/:id_teacher/add/class/:id_class',async (req,res)=>{
     } catch (error) {
         res.send(405).send(error.message);
     }
+});
+
+router.put('/:id_teacher/remove/class/:id_class',async (req,res)=>{
+    
+    let teacher = await Teacher.findById(req.params.id_teacher);
+    if(!teacher)
+        return res.status(404).send('Teacher not found');
+
+    let classRoom = await ClassRoom.findById(req.params.id_class);
+        if(!classRoom)
+            return res.status(404).send('ClassRoom not found');
+    try {
+        //update of teacher
+        teacher.classrooms = teacher.classrooms.filter(cl => !cl._id.equals(classRoom._id));
+        teacher = await teacher.save();
+        classRoom.teachers = classRoom.teachers.filter(t => !t.equals(teacher._id));
+        await classRoom.save();
+        return res.send(teacher)
+    } catch (error) {
+        res.send(405).send(error.message);
+    }
+});
+
+router.delete('/id/:id_teacher', async (req,res)=>{
+    let teacher = await Teacher.findById(req.params.id_teacher);
+    if(!teacher)
+        return res.status(404).send('Teacher not found');
+
+        for (let index = 0; index < teacher.classrooms.length; index++) {
+            const cl = teacher.classrooms[index];
+            let classRoom = await ClassRoom.findById(cl._id);
+            classRoom.teachers = classRoom.teachers.filter(t => !t.equals(teacher._id));
+            await classRoom.save();
+        }
+        await Teacher.deleteOne({_id:req.params.id_teacher});
+        res.send(teacher);
+        
+
 });
 
 module.exports = router
