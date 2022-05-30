@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const {User} = require('../models/user');
 const bcrypt = require('bcrypt');
-const userDebugger = require('debug')('app:user')
+const userDebugger = require('debug')('app:user');
+const jwt = require('jsonwebtoken');
+const auth = require('../middelwares/auth')
 
 router.post('/register', async (req,res)=>{
     let user = new User(req.body);
@@ -24,11 +26,17 @@ router.post('/login', async (req,res)=>{
         let bool = await bcrypt.compare(password, user.password)
     if(!bool)
     return res.status(400).send('Username or password incorrect');
-    res.send('User logged in.')
+    let token = jwt.sign({username : user.username, email : user.email},'secret', { expiresIn: '1m' });
+    res.header('x-auth-token',token).send('User logged in.')
     } catch (error) {
         res.status(500).send('Problem with Bcrypt Compare : '+error.message)
     }
     
+});
+
+router.get('/me',auth, async (req,res)=>{
+    
+        res.send('My username is :'+req.payload.username)
 });
 
 

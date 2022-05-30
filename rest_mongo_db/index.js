@@ -5,6 +5,7 @@ const student_router= require('./routers/students');
 const class_room_router= require('./routers/class_rooms'); 
 const teacher_router= require('./routers/teachers'); 
 const user_router= require('./routers/users'); 
+const auth = require('./middelwares/auth')
 
 
 const app = express();
@@ -13,7 +14,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use('/api/students',student_router);
 app.use('/api/classrooms',class_room_router);
-app.use('/api/teachers',teacher_router);
+app.use('/api/teachers',auth,teacher_router);
 app.use('/api/users',user_router);
 
 

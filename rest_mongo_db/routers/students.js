@@ -4,6 +4,7 @@ const {ClassRoom} = require('../models/class_room');
 const studentDebug = require('debug')('app:route:student');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
+const auth = require('../middelwares/auth')
 
 let params_validator = Joi.object({
     id : Joi.objectId(),
@@ -15,7 +16,8 @@ let params_validator = Joi.object({
 })
 
 //save student
-router.post('/', async (req,res)=>{
+router.post('/',auth, async (req,res)=>{
+   
     let res_validation = student_validator.validate(req.body);
     if(res_validation.error)
         return res.status(400).send(res_validation.error.details[0].message)
