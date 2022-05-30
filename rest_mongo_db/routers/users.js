@@ -1,15 +1,12 @@
 const router = require('express').Router();
 const {User} = require('../models/user');
-const bcrypt = require('bcrypt');
 const userDebugger = require('debug')('app:user');
-const jwt = require('jsonwebtoken');
-const auth = require('../middelwares/auth')
+const auth = require('../middelwares/auth');
 
 router.post('/register', async (req,res)=>{
     let user = new User(req.body);
-    let salt = await bcrypt.genSalt(10);
-    userDebugger('salt : ',salt);
-    user.password = await bcrypt.hash(user.password,salt)
+   
+    user.password = await user.hash_password(req.body.password);
     userDebugger('password :',user.password)
    
     await user.save();
@@ -23,10 +20,10 @@ router.post('/login', async (req,res)=>{
         return res.status(400).send('Username or password incorrect');
     let password = req.body.password
     try {
-        let bool = await bcrypt.compare(password, user.password)
+        let bool = await user.verify_password(password,user.password);
     if(!bool)
     return res.status(400).send('Username or password incorrect');
-    let token = jwt.sign({username : user.username, email : user.email},'secret', { expiresIn: '1m' });
+    let token = user.create_jwt({username : user.username, email : user.email},{ expiresIn: '1m' });
     res.header('x-auth-token',token).send('User logged in.')
     } catch (error) {
         res.status(500).send('Problem with Bcrypt Compare : '+error.message)

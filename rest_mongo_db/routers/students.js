@@ -16,7 +16,7 @@ let params_validator = Joi.object({
 })
 
 //save student
-router.post('/',auth, async (req,res)=>{
+router.post('/', async (req,res)=>{
    
     let res_validation = student_validator.validate(req.body);
     if(res_validation.error)

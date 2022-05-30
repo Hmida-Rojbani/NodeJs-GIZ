@@ -5,6 +5,7 @@ module.exports =  (req,res,next)=> {
     if(!token)
         return res.status(403).send('Token not found');
         try {
+            token = token.replace("Bearer ", "");
             var payload = jwt.verify(token,'secret');
         } catch (error) {
             return res.status(403).send(error.message);
