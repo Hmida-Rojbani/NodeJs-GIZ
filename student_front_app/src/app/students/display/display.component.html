@@ -1,0 +1,19 @@
+<table class="table table-striped table-bordered table-hover table-responsive">
+    <thead class="thead-default">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Class</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let student of students;let index = index">
+                <td scope="row"> {{index + 1}} </td>
+                <td> {{student.name}} </td>
+                <td> {{student.age}} </td>
+                <td  [className]="student.class.active ? 'text-success' : 'text-danger'"> {{student.class.name}} </td>
+            </tr>
+        </tbody>
+</table>
+
