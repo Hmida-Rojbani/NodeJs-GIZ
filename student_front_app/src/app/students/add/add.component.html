@@ -1,1 +1,80 @@
-<p>add works!</p>
+<div class="container-fluid">
+    
+        <form class="form-register" [formGroup]="addStudentForm" (ngSubmit)="sendStudent()">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6-offset-3">
+                <div class="h4 text-danger text-center" *ngIf="isSubmitted"> Fill the missing Fields</div>
+                    <h3 class="h3 mb-3 font-weight-normal text-center">Add Student</h3>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" formControlName="name" placeholder="Enter name" required  [ngClass]="
+                    (addStudentForm.controls['name'].touched ||
+                    addStudentForm.controls['name'].dirty) &&
+                    addStudentForm.controls['name'].hasError('required')
+                      ? 'is-invalid'
+                      : '' || addStudentForm.controls['name']
+                      .hasError('minlength')
+                      ? 'is-invalid'
+                      : '' ||
+                        ((addStudentForm.controls['name'].touched ||
+                        addStudentForm.controls['name'].dirty) &&
+                          !addStudentForm.controls['name'].invalid)
+                      ? 'is-valid'
+                      : ''
+                  ">
+                </div>
+                <span  *ngIf="addStudentForm.controls['name'].invalid && (addStudentForm.controls['name'].dirty || addStudentForm.controls['name'].touched)" class="alert small text-danger">
+                    
+                        Please enter a name.
+                    
+                </span>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" min ="1" class="form-control" formControlName="age" placeholder="Enter age" required>
+                </div>
+                <div class="form-group">
+                    <label>Class</label>
+                    <select  (change)="changeClass($event)"
+                                formControlName="class_id"
+                            name="class" class="form-control">
+                            <option hidden value="" disabled selected>Select Class</option>
+                        <option *ngFor="let cls of classes" [ngValue]="cls._id"> {{cls.name}} </option>
+                    </select>
+                    <!-- error block -->
+                <div class="invalid-feedback" *ngIf="isSubmitted && classId?.invalid">
+                    <sup>*</sup>Please provide Class name
+                </div>
+                </div>
+                <div class="card mt-2 " >
+                    <div class="card-body">
+                        <h5 class="card-title">Address</h5>
+                <div class="form-group">
+                    <label> Number</label>
+                    <input type="number" class="form-control" formControlName="adress_number" placeholder="Number" required>
+                </div>
+                <div class="form-group">
+                    <label>Street</label>
+                    <input type="text" class="form-control" formControlName="adress_street" placeholder="Street" required>
+                </div>
+                <div class="form-group">
+                    <label> City</label>
+                    <input type="text" class="form-control" formControlName="adress_city" placeholder="City" required>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class=" mt-auto row justify-content-md-center">
+            <div class="col-md-6-offset-3">
+                <div class="pt-2  form-group">
+                <div class="d-grid gap-3">
+                    
+                        <button type="submit" class=" btn btn-primary">Register!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+        
+    
+</div>

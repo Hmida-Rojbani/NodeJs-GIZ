@@ -16,6 +16,12 @@ router.post('/', async (req,res)=>{
 });
 
 //retreive all classrooms
+router.get('/names', async (req,res)=>{
+    let classRooms = await ClassRoom.find().select('name');
+    res.send(classRooms)
+
+});
+//retreive all classrooms
 router.get('/', async (req,res)=>{
     let classRooms = await ClassRoom.find();
     res.send(classRooms)
