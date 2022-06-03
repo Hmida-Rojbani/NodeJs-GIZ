@@ -10,30 +10,42 @@ router.post('/register', async (req,res)=>{
     userDebugger('password :',user.password)
    
     await user.save();
-    res.status(201).send(user);
+    res.status(201).send({
+        message: 'User successfully created!',
+        result: user,
+      });
 });
 
 router.post('/login', async (req,res)=>{
+    userDebugger('Login body :',req.body )
     let username = req.body.username;
     let user = await User.findOne({username : username});
     if(!user)
-        return res.status(400).send('Username or password incorrect');
+        return res.status(401).send({
+            message: 'Authentication failed',
+          });
     let password = req.body.password
     try {
         let bool = await user.verify_password(password,user.password);
     if(!bool)
-    return res.status(400).send('Username or password incorrect');
+    return res.status(401).send({
+        message: 'Authentication failed',
+      });
     let token = user.create_jwt({username : user.username, email : user.email},{ expiresIn: '1m' });
-    res.header('x-auth-token',token).send('User logged in.')
+    res.header('Access-Control-Expose-Headers','x-auth-token').header('x-auth-token',token).send({_id:user._id})
     } catch (error) {
-        res.status(500).send('Problem with Bcrypt Compare : '+error.message)
+        res.status(500).send({
+            message: `Problem with Bcrypt Compare : +${error.message}`
+          })
     }
     
 });
 
-router.get('/me',auth, async (req,res)=>{
-    
-        res.send('My username is :'+req.payload.username)
+router.get('/user-profile/:id',auth, async (req,res)=>{
+    let user = await User.findById(req.params.id);
+        res.send({
+            msg : user
+        })
 });
 
 

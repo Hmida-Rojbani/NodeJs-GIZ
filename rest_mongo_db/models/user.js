@@ -17,7 +17,7 @@ user_schema.methods.verify_password= async (password, db_password)=>{
     return  await bcrypt.compare(password, db_password);
 };
 user_schema.methods.create_jwt= (payload,expires)=>{ 
-    return 'Bearer '+jwt.sign(payload,'secret', expires);
+    return jwt.sign(payload,'secret', expires);
 };
 
 let User = mongoose.model('User', user_schema);
